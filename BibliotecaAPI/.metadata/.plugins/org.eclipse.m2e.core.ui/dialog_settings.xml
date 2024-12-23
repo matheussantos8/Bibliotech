@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="MavenProjectImportWizardPage">
+		<list key="rootDirectory">
+<<<<<<< HEAD
+			<item value="D:\prog\SpringBoot\ARQUIVOS COMPACTADOS\Biblioteca-master\BibliotecaAPI"/>
+=======
+>>>>>>> 84200c01fccb6ee6567281c5d2f28c73694bf922
+			<item value="D:\prog\SpringBoot\Projeto api biblioteca\Biblioteca"/>
+			<item value="C:\Users\3cti2024\Documents\Clone\Biblioteca\Biblioteca"/>
+		</list>
+		<list key="projectNameTemplate">
+			<item value="[artifactId]"/>
+			<item value="[artifactId]-TRUNK"/>
+			<item value="[artifactId]-[version]"/>
+			<item value="[groupId].[artifactId]"/>
+			<item value="[groupId].[artifactId]-[version]"/>
+			<item value="[name]"/>
+		</list>
+	</section>
+</section>

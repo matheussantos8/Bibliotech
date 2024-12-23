@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="Put_livros.css">
+    <script src="https://kit.fontawesome.com/0008a4338f.js" crossorigin="anonymous"></script>
+    <script src="../JS/sidebar.js"></script>
+    <script src="../JS/botao.js"></script>
+    <script src="Put_livros.js"></script>
+</head>
+<body>
+    <header class="banner-topo">
+
+        
+        <div id="menu">
+            <i class="fa-solid fa-bars" id="openMenu"></i>
+        </div>
+        <h2 style="font-size: xx-large; letter-spacing: 15px;">BIBLIOTECH</h2>
+        <img src="../imagens/logo livro1.png" class="banner-imagem">
+
+    </header>
+    
+    <header class="linhapreta"></header>
+    
+    <div class="sidebar closed" id="sidebar">
+        <div class="icons">
+            <i class="fa-solid fa-user"></i>
+
+            <i class="fa-solid fa-arrow-left" id="closeMenu"></i>
+        </div>
+
+        <nav>
+            <ul>
+                <li><a href="../livros/livros.html">Livros</a></li>
+                <hr>
+                <li><a href="../autores/autores.html">Autores</a></li>
+                <hr>
+                <li><a href="../generos/generos.html">Gêneros</a></li>
+                <hr>
+                <li><a href="../pessoas/pessoas.html">Pessoas</a></li>
+                <hr>
+                <li><a href="../emprestimos/emprestimos.html">Empréstimos</a></li>
+                <hr>
+                <li><a href="../reservas/reservas.html">Reservas</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <h1>Editar Livro</h1>
+
+    <a href="livros.html">
+    <div class="box">
+
+        <div id="seta">
+            <i class="fa-solid fa-arrow-left"></i>
+  
+        </div>
+    </a>
+    
+    <form id="formulario">
+
+       <br> <br><br>
+    <input type="hidden" id="titulo-id">
+    <label for="titulo">Título:</label>
+    <input type="text" id="tituloInput" required><br><br>
+
+    <input type="hidden" id="isbn-id">
+    <label for="isbn">ISBN:</label>
+    <input type="text" id="isbnInput" required><br><br>
+
+    <input type="hidden" id="autor-id">
+    <label for="autor">Autor:</label>
+    <select id="autorInput" name="autor" required>
+        <option value="" disabled selected>Selecione o autor</option>
+    </select><br><br>
+
+    <input type="hidden" id="genero-id">
+    <label for="genero">Gênero:</label>
+    <select id="generoInput" name="genero" required>
+        <option value="" disabled selected>Selecione o gênero</option>
+    </select><br><br>
+
+    <input type="hidden" id="ano-id">
+    <label for="ano">Ano de Publicação:</label>
+    <input type="date" id="anoInput" required><br><br>
+
+
+    <label for="imagem">Imagem:</label>
+    <input type="file" id="imagem" accept="image/*" onchange="convertImageToBase64()" required><br><br><br>
+    <input type="hidden" id="fotoBase64" name="fotoBase64">
+
+    <button class="confirmar" >Confirmar</button>
+    <div class="confirmation-modal" id="confirmation-modal">
+      <div class="modal-content">
+        ✔️ Sucesso!
+      </div>
+    </div>
+    
+    <button type="reset" class="cancelar">Cancelar</button>
+    
+    <div class="error-modal" id="error-modal">
+        <div class="modal-content">
+          ❌ Erro!
+        </div>
+      </div>
+      
+    </div>
+    
+    </form>
+    </div>
+
+<script>
+    
+    function convertImageToBase64() {
+        const fileInput = document.getElementById('imagem');
+        const file = fileInput.files[0];
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            document.getElementById('fotoBase64').value = e.target.result;
+        };
+
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    }
+
+    async function loadOptions() {
+        let response = await fetch(`http://localhost:8080/autores`);
+        let autores = await response.json();
+
+        let select = '<option value="">Selecione o autor</option>';
+        autores.forEach(autor => {
+            select += `<option value="${autor.id}">${autor.nome}</option>`;
+        });
+        document.getElementById('autorInput').innerHTML = select;
+
+        response = await fetch(`http://localhost:8080/generos`);
+        const generos = await response.json();
+        select = '<option value="">Selecione o gênero</option>';
+        generos.forEach(genero => {
+            select += `<option value="${genero.id}">${genero.nome}</option>`;
+        });
+        document.getElementById('generoInput').innerHTML = select;
+    }
+
+    window.onload = async function () {
+        await loadOptions();
+
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get('id');
+        if (id) {
+            await loadLivro(id);
+        }
+    };
+
+    function loadAutorFromLivro(id) {
+return fetch(`http://localhost:8080/autores/${id}`, {
+    method: 'GET',
+    headers: {
+        /*"ngrok-skip-browser-warning" : "true",*/
+        'Content-Type': 'application/json'
+    }
+})
+    .then(response => {
+        if (!response.ok) throw new Error('Erro ao buscar autor');
+        return response.json();
+    })
+    .then(autor => autor.nome)
+    .catch(error => {
+        console.error("Erro ao buscar autor:", error);
+        return 'Erro ao carregar autor';
+    });
+}
+
+function loadGeneroFromLivro(id) {
+return fetch(`http://localhost:8080/generos/${id}`, {
+    method: 'GET',
+    headers: {
+        /*"ngrok-skip-browser-warning" : "true",*/
+        'Content-Type': 'application/json'
+    }
+})
+    .then(response => {
+        if (!response.ok) throw new Error('Erro ao buscar gênero');
+        return response.json();
+    })
+    .then(genero => genero.nome)
+    .catch(error => {
+        console.error("Erro ao buscar gênero:", error);
+        return 'Erro ao carregar gênero';
+    });
+}
+</script>
+
+
+    
+
+    
+</body>
+</html>
