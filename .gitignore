@@ -1,1 +1,23 @@
-/.metadata/
+# Pasta de configurações da IDE
+.metadata/
+.settings/
+.project
+.classpath
+.factorypath
+
+# Compilação e Build (Maven)
+target/
+*.class
+
+# Logs e arquivos temporários
+*.log
+*.tmp
+hs_err_pid*
+
+# Arquivos de pacotes
+*.jar
+*.war
+*.zip
+
+# Configurações do VS Code
+.vscode/
